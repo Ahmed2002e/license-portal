@@ -231,7 +231,7 @@ function goBack() {
     document.getElementById('hero-section').style.display = '';
     document.getElementById('license-input').value = '';
     document.querySelector('.clear-input').style.display = 'none';
-    document.documentElement.className = '';
+    document.documentElement.id = 'html-root';
     showSection('home');
 }
 

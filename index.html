@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html-root">
 <head>
+    <script>
+        if (location.search.indexOf('license=') > -1) {
+            document.documentElement.id = 'qr-scan';
+            document.documentElement.style.cssText = '';
+            var s = document.createElement('style');
+            s.textContent = '#qr-scan .top-bar,#qr-scan .header,#qr-scan .hero,#qr-scan .footer,#qr-scan .about-section{display:none!important}#qr-scan body{background:linear-gradient(160deg,#0a2463,#1e3a7b 50%,#0a2463);min-height:100vh;margin:0}#qr-scan .result-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}';
+            document.head.appendChild(s);
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>License Verification Portal - Official Government Website</title>
@@ -8,30 +17,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <script>
-        if (window.location.search.indexOf('license=') > -1) {
-            document.documentElement.className = 'qr-scan';
-        }
-    </script>
-    <style>
-        html.qr-scan .top-bar,
-        html.qr-scan .header,
-        html.qr-scan .hero,
-        html.qr-scan .footer,
-        html.qr-scan .about-section { display: none !important; }
-        html.qr-scan body {
-            background: linear-gradient(160deg, #0a2463 0%, #1e3a7b 50%, #0a2463 100%);
-            min-height: 100vh;
-            margin: 0;
-        }
-        html.qr-scan .result-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-    </style>
 </head>
 <body>
     <!-- Top Bar -->

@@ -43,6 +43,21 @@ const LICENSE_DB = {
         bloodGroup: 'O+',
         permitClass: 'B',
         photo: 'photos/P11070433.png'
+    },
+    'P10313788': {
+        number: '20003655',
+        name: 'MUSTAFA RABIE MOHAMED AHMED',
+        type: 'International Driving Permit',
+        issueDate: '18 April 2026',
+        expiryDate: '16 April 2027',
+        status: 'VALID',
+        dob: '15/10/2005',
+        nationality: 'Sudan',
+        passport: 'P10313788',
+        gender: 'Male',
+        bloodGroup: 'A+',
+        permitClass: 'B',
+        photo: 'photos/P10313788.png'
     }
 };
 

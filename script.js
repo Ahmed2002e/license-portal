@@ -1,43 +1,31 @@
 const LICENSE_DB = {
-    'PL-2026-04821': {
-        number: 'PL-2026-04821',
-        name: 'John Smith',
-        type: 'Professional License',
-        issueDate: '15 March 2026',
-        expiryDate: '15 March 2031',
-        status: 'VALID'
+    'P11300029': {
+        number: '20003653',
+        name: 'KHALID MONTASER MOHAMED IBRAHIM',
+        type: 'International Driving Permit',
+        issueDate: '04 December 2023',
+        expiryDate: '03 December 2033',
+        status: 'VALID',
+        dob: '13/01/2005',
+        nationality: 'Sudan',
+        passport: 'P11300029',
+        gender: 'Male',
+        bloodGroup: 'AB+',
+        permitClass: 'B'
     },
-    'PL-2025-03294': {
-        number: 'PL-2025-03294',
-        name: 'Sarah Johnson',
-        type: 'Professional License',
-        issueDate: '01 July 2025',
-        expiryDate: '01 July 2030',
-        status: 'VALID'
-    },
-    'CL-2024-01107': {
-        number: 'CL-2024-01107',
-        name: 'Ahmed Hassan',
-        type: 'Commercial License',
-        issueDate: '20 November 2024',
-        expiryDate: '20 November 2029',
-        status: 'VALID'
-    },
-    'ML-2026-07538': {
-        number: 'ML-2026-07538',
-        name: 'Maria Garcia',
-        type: 'Medical License',
-        issueDate: '10 January 2026',
-        expiryDate: '10 January 2031',
-        status: 'VALID'
-    },
-    'EL-2024-05612': {
-        number: 'EL-2024-05612',
-        name: 'David Williams',
-        type: 'Engineering License',
-        issueDate: '05 September 2024',
-        expiryDate: '05 September 2029',
-        status: 'VALID'
+    'P10131788': {
+        number: '20003653',
+        name: 'OMER ALRASHED ALI SULIMAN',
+        type: 'International Driving Permit',
+        issueDate: '19 July 2026',
+        expiryDate: '18 July 2027',
+        status: 'VALID',
+        dob: '30/07/2005',
+        nationality: 'Sudan',
+        passport: 'P10131788',
+        gender: 'Male',
+        bloodGroup: 'AB+',
+        permitClass: 'B'
     }
 };
 
@@ -184,7 +172,17 @@ function showResult(licenseNum) {
     const resultCard = document.getElementById('result-card');
     const validDiv = document.getElementById('result-valid');
     const invalidDiv = document.getElementById('result-invalid');
-    const license = LICENSE_DB[licenseNum];
+    let license = LICENSE_DB[licenseNum];
+
+    if (!license) {
+        for (const key in LICENSE_DB) {
+            if (LICENSE_DB[key].number === licenseNum || LICENSE_DB[key].passport === licenseNum) {
+                license = LICENSE_DB[key];
+                licenseNum = key;
+                break;
+            }
+        }
+    }
 
     if (license) {
         invalidDiv.style.display = 'none';
@@ -198,10 +196,16 @@ function showResult(licenseNum) {
         document.getElementById('res-status').textContent = license.status;
         document.getElementById('res-vid').textContent = generateVerificationId();
 
+        document.getElementById('res-dob').textContent = license.dob || '';
+        document.getElementById('res-nationality').textContent = license.nationality || '';
+        document.getElementById('res-gender').textContent = license.gender || '';
+        document.getElementById('res-blood').textContent = license.bloodGroup || '';
+        document.getElementById('res-class').textContent = license.permitClass || '';
+
         const qrContainer = document.getElementById('result-qr-code');
         qrContainer.innerHTML = '';
         new QRCode(qrContainer, {
-            text: window.location.origin + window.location.pathname + '?license=' + license.number,
+            text: window.location.origin + window.location.pathname + '?license=' + license.passport,
             width: 92,
             height: 92,
             colorDark: '#0a2463',
@@ -242,7 +246,7 @@ function handleQRUpload(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         switchTab('license');
-        document.getElementById('license-input').value = 'PL-2026-04821';
+        document.getElementById('license-input').value = '20003653';
         document.querySelector('.clear-input').style.display = 'flex';
         verifyLicense();
     };

@@ -139,7 +139,7 @@
                 <div class="gen-form">
                     <div class="gen-field">
                         <span class="gen-label">License Number</span>
-                        <input type="text" class="gen-input" id="single-license" placeholder="PL-2026-04821" value="PL-2026-04821">
+                        <input type="text" class="gen-input" id="single-license" placeholder="P11300029" value="P11300029">
                     </div>
                     <div class="gen-field">
                         <span class="gen-label">QR Code Size</span>
@@ -180,7 +180,7 @@
                 <div class="gen-form">
                     <div class="gen-field">
                         <span class="gen-label">License Number</span>
-                        <input type="text" class="gen-input" id="url-license" placeholder="PL-2026-04821" value="PL-2026-04821">
+                        <input type="text" class="gen-input" id="url-license" placeholder="P11300029" value="P11300029">
                     </div>
                     <div class="gen-field">
                         <span class="gen-label">Website URL</span>
@@ -216,7 +216,7 @@
             <!-- Batch -->
             <div class="barcode-tab-content" id="tab-batch">
                 <div class="batch-add-row">
-                    <input type="text" id="batch-input" placeholder="Enter license number (e.g., PL-2026-04821)">
+                    <input type="text" id="batch-input" placeholder="Enter passport number (e.g., P11300029)">
                     <button class="batch-add-btn" onclick="addBatch()"><span class="material-symbols-outlined">add</span> Add</button>
                 </div>
                 <div class="batch-list" id="batch-list"></div>
@@ -248,11 +248,8 @@
         var BASE_URL = window.location.origin + window.location.pathname.replace('barcode.html', 'index.html');
 
         var people = [
-            { license: 'PL-2026-04821', name: 'John Smith', type: 'Professional License' },
-            { license: 'PL-2025-03294', name: 'Sarah Johnson', type: 'Professional License' },
-            { license: 'CL-2024-01107', name: 'Ahmed Hassan', type: 'Commercial License' },
-            { license: 'ML-2026-07538', name: 'Maria Garcia', type: 'Medical License' },
-            { license: 'EL-2024-05612', name: 'David Williams', type: 'Engineering License' }
+            { license: 'P11300029', name: 'KHALID MONTASER MOHAMED IBRAHIM', type: 'International Driving Permit' },
+            { license: 'P10131788', name: 'OMER ALRASHED ALI SULIMAN', type: 'International Driving Permit' }
         ];
 
         var batchItems = people.slice();
@@ -269,7 +266,7 @@
         }
 
         document.getElementById('url-base').value = BASE_URL;
-        document.getElementById('url-example').textContent = BASE_URL + '?license=PL-2026-04821';
+        document.getElementById('url-example').textContent = BASE_URL + '?license=P11300029';
 
         window.switchTab = function(tab) {
             document.querySelectorAll('.barcode-tab-btn').forEach(function(b) { b.classList.remove('active'); });

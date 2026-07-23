@@ -4,10 +4,22 @@
     <script>
         if (location.search.indexOf('license=') > -1) {
             document.documentElement.id = 'qr-scan';
-            document.documentElement.style.cssText = '';
             var s = document.createElement('style');
-            s.textContent = '#qr-scan .top-bar,#qr-scan .header,#qr-scan .hero,#qr-scan .footer,#qr-scan .about-section{display:none!important}#qr-scan body{background:linear-gradient(160deg,#0a2463,#1e3a7b 50%,#0a2463);min-height:100vh;margin:0}#qr-scan .result-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}';
+            s.id = 'qr-scan-style';
+            s.textContent = '#qr-scan #hero-section,#qr-scan .header,#qr-scan .top-bar,#qr-scan .footer,#qr-scan .about-section{display:none!important;visibility:hidden!important}#qr-scan body{background:linear-gradient(160deg,#0a2463,#1e3a7b 50%,#0a2463);min-height:100vh;margin:0}#qr-scan .result-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}';
             document.head.appendChild(s);
+            document.addEventListener('DOMContentLoaded', function() {
+                var el = document.getElementById('hero-section');
+                if (el) el.style.display = 'none';
+                var hdr = document.querySelector('.header');
+                if (hdr) hdr.style.display = 'none';
+                var tb = document.querySelector('.top-bar');
+                if (tb) tb.style.display = 'none';
+                var ft = document.querySelector('.footer');
+                if (ft) ft.style.display = 'none';
+                var ab = document.querySelector('.about-section');
+                if (ab) ab.style.display = 'none';
+            });
         }
     </script>
     <meta charset="UTF-8">

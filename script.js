@@ -231,7 +231,7 @@ function goBack() {
     document.getElementById('hero-section').style.display = '';
     document.getElementById('license-input').value = '';
     document.querySelector('.clear-input').style.display = 'none';
-    document.body.classList.remove('qr-scan-mode');
+    document.documentElement.className = '';
     showSection('home');
 }
 
@@ -254,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const license = params.get('license');
     if (license) {
-        document.body.classList.add('qr-scan-mode');
         document.getElementById('license-input').value = license;
         document.querySelector('.clear-input').style.display = 'flex';
         verifyLicense();

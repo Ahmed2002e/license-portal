@@ -1140,6 +1140,46 @@ body {
     }
     .top-bar-inner {
         font-size: 0.68rem;
+        padding: 0 12px;
+    }
+    .gov-indicator {
+        font-size: 0.68rem;
+    }
+    .gov-status {
+        display: none;
+    }
+    .result-section {
+        padding: 20px 12px 40px;
+    }
+    .result-header {
+        padding: 24px 16px 20px;
+    }
+    .result-header h3 {
+        font-size: 1.1rem;
+    }
+    .result-body {
+        padding: 16px;
+    }
+    .detail-item {
+        padding: 12px;
+    }
+    .detail-label {
+        font-size: 0.68rem;
+    }
+    .detail-value {
+        font-size: 0.88rem;
+    }
+    .loading-overlay {
+        padding: 40px 0;
+    }
+    .loader-progress {
+        width: 200px;
+    }
+    .result-card {
+        width: 100%;
+    }
+    .result-container {
+        max-width: 100%;
     }
 }
 
@@ -1158,6 +1198,19 @@ body {
         flex-direction: column;
         gap: 6px;
         text-align: center;
+    }
+    .logo-text h1 {
+        font-size: 0.95rem;
+    }
+    .logo-sub {
+        font-size: 0.65rem;
+    }
+    .result-top-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .invalid-info p {
+        font-size: 0.85rem;
     }
 }
 

@@ -28,6 +28,21 @@ const LICENSE_DB = {
         bloodGroup: 'AB+',
         permitClass: 'B',
         photo: 'photos/P10131788.png'
+    },
+    'P11070433': {
+        number: '20003654',
+        name: 'MOHAMED HATIM ALI IBRAHIM',
+        type: 'International Driving Permit',
+        issueDate: '24 July 2026',
+        expiryDate: '22 July 2027',
+        status: 'VALID',
+        dob: '16/02/2004',
+        nationality: 'Sudan',
+        passport: 'P11070433',
+        gender: 'Male',
+        bloodGroup: 'O+',
+        permitClass: 'B',
+        photo: 'photos/P11070433.png'
     }
 };
 

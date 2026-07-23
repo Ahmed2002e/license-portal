@@ -1,6 +1,6 @@
 const LICENSE_DB = {
     'P11300029': {
-        number: '20003652',
+        number: '2000352',
         name: 'KHALID MONTASER MOHAMED IBRAHIM',
         type: 'International Driving Permit',
         issueDate: '04 December 2023',

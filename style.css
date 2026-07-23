@@ -43,6 +43,8 @@ body {
     color: var(--gray-700);
     min-height: 100vh;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 .material-symbols-outlined {
@@ -1085,137 +1087,243 @@ body {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+    .top-bar-inner {
+        padding: 6px 12px;
+    }
+    .gov-indicator {
+        font-size: 0.65rem;
+    }
+    .gov-indicator .material-symbols-outlined {
+        display: none;
+    }
+    .gov-status {
+        display: none;
+    }
+    .header {
+        position: relative;
+    }
     .header-inner {
         flex-direction: column;
         height: auto;
-        padding: 12px 16px;
-        gap: 10px;
+        padding: 10px 12px;
+        gap: 8px;
+    }
+    .logo-group {
+        gap: 8px;
+    }
+    .logo-shield {
+        width: 32px;
+        height: 32px;
+    }
+    .logo-shield .material-symbols-outlined {
+        font-size: 20px;
+    }
+    .logo-text h1 {
+        font-size: 0.9rem;
+    }
+    .logo-sub {
+        font-size: 0.6rem;
     }
     .nav-links {
         width: 100%;
         justify-content: center;
+        gap: 2px;
     }
     .nav-link {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+    .nav-link .material-symbols-outlined {
+        font-size: 16px;
     }
     .hero {
-        padding: 40px 16px 36px;
+        padding: 30px 12px 28px;
+    }
+    .hero-shield-container {
+        width: 70px;
+        height: 70px;
+    }
+    .hero-shield {
+        inset: 10px;
+    }
+    .hero-shield .material-symbols-outlined {
+        font-size: 28px;
     }
     .hero-title {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
     .hero-subtitle {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+        margin-bottom: 20px;
+    }
+    .glass-card {
+        border-radius: 12px;
+    }
+    .search-card {
+        border-radius: 12px;
+    }
+    .tab-btn {
+        padding: 10px 12px;
+        font-size: 0.78rem;
+        gap: 4px;
+    }
+    .tab-btn .material-symbols-outlined {
+        font-size: 16px;
+    }
+    .tab-content {
+        padding: 16px;
     }
     .search-form {
         flex-direction: column;
+        gap: 10px;
+    }
+    #license-input {
+        padding: 12px 40px 12px 38px;
+        font-size: 0.9rem;
     }
     .btn-verify {
         justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    .search-hint {
+        font-size: 0.75rem;
     }
     .hero-stats {
-        gap: 20px;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    .stat-item {
+        flex: 1;
+        min-width: 70px;
     }
     .stat-number {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+    }
+    .stat-label {
+        font-size: 0.65rem;
+    }
+    .result-section {
+        padding: 16px 12px 32px;
+    }
+    .result-container {
+        max-width: 100%;
+        width: 100%;
+    }
+    .result-header {
+        padding: 20px 12px 16px;
+    }
+    .result-header h3 {
+        font-size: 1rem;
+    }
+    .result-body {
+        padding: 12px;
+    }
+    .result-top-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
     }
     .detail-row {
         grid-template-columns: 1fr;
     }
-    .result-top-row {
-        gap: 24px;
+    .detail-item {
+        padding: 10px 12px;
     }
-    .feature-grid {
-        grid-template-columns: 1fr;
+    .detail-item:nth-child(2) {
+        background: var(--gray-50);
+    }
+    .detail-label {
+        font-size: 0.65rem;
+    }
+    .detail-value {
+        font-size: 0.85rem;
+        word-break: break-word;
     }
     .result-actions {
         flex-direction: column;
+        gap: 8px;
     }
     .btn-secondary {
         justify-content: center;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+    .loading-overlay {
+        padding: 30px 0;
+    }
+    .loader-shield {
+        width: 56px;
+        height: 56px;
+    }
+    .loader-progress {
+        width: 180px;
+    }
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .feature-item {
+        padding: 14px;
+    }
+    .about-section {
+        padding: 24px 12px 40px;
     }
     .about-card {
-        padding: 20px;
+        padding: 16px;
+    }
+    .about-card h2 {
+        font-size: 1.1rem;
     }
     .step-item {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-    .top-bar-inner {
-        font-size: 0.68rem;
-        padding: 0 12px;
+    .security-seal {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
     }
-    .gov-indicator {
-        font-size: 0.68rem;
+    .footer {
+        margin-top: 40px;
     }
-    .gov-status {
-        display: none;
+    .footer-inner {
+        padding: 24px 12px 16px;
     }
-    .result-section {
-        padding: 20px 12px 40px;
+    .footer-links {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
     }
-    .result-header {
-        padding: 24px 16px 20px;
+    .footer-bottom {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
     }
-    .result-header h3 {
-        font-size: 1.1rem;
-    }
-    .result-body {
-        padding: 16px;
-    }
-    .detail-item {
-        padding: 12px;
-    }
-    .detail-label {
-        font-size: 0.68rem;
-    }
-    .detail-value {
-        font-size: 0.88rem;
-    }
-    .loading-overlay {
-        padding: 40px 0;
-    }
-    .loader-progress {
-        width: 200px;
-    }
-    .result-card {
-        width: 100%;
-    }
-    .result-container {
-        max-width: 100%;
+    .qr-placeholder {
+        width: 180px;
+        height: 180px;
     }
 }
 
 @media (max-width: 480px) {
-    .hero-title {
-        font-size: 1.3rem;
-    }
     .nav-link span:last-child {
         display: none;
     }
-    .footer-links {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .hero-title {
+        font-size: 1.1rem;
     }
-    .footer-bottom {
-        flex-direction: column;
-        gap: 6px;
-        text-align: center;
+    .hero-shield-container {
+        width: 60px;
+        height: 60px;
     }
-    .logo-text h1 {
-        font-size: 0.95rem;
+    .stat-number {
+        font-size: 1rem;
     }
-    .logo-sub {
-        font-size: 0.65rem;
-    }
-    .result-top-row {
-        flex-direction: column;
-        align-items: center;
-    }
-    .invalid-info p {
-        font-size: 0.85rem;
+    .stat-divider {
+        display: none;
     }
 }
 

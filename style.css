@@ -1161,6 +1161,30 @@ body {
     }
 }
 
+/* QR SCAN MODE - only show verification result */
+body.qr-scan-mode .top-bar,
+body.qr-scan-mode .header,
+body.qr-scan-mode .hero,
+body.qr-scan-mode .footer,
+body.qr-scan-mode .about-section {
+    display: none !important;
+}
+body.qr-scan-mode {
+    background: linear-gradient(160deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary) 100%);
+    min-height: 100vh;
+}
+body.qr-scan-mode .result-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+body.qr-scan-mode .result-container {
+    width: 100%;
+    max-width: 600px;
+}
+
 /* PRINT */
 @media print {
     .top-bar, .header, .footer, .hero, .result-actions {

@@ -11,7 +11,8 @@ const LICENSE_DB = {
         passport: 'P11300029',
         gender: 'Male',
         bloodGroup: 'AB+',
-        permitClass: 'B'
+        permitClass: 'B',
+        photo: 'photos/P11300029.png'
     },
     'P10131788': {
         number: '20003653',
@@ -25,7 +26,8 @@ const LICENSE_DB = {
         passport: 'P10131788',
         gender: 'Male',
         bloodGroup: 'AB+',
-        permitClass: 'B'
+        permitClass: 'B',
+        photo: 'photos/P10131788.png'
     }
 };
 
@@ -201,6 +203,13 @@ function showResult(licenseNum) {
         document.getElementById('res-gender').textContent = license.gender || '';
         document.getElementById('res-blood').textContent = license.bloodGroup || '';
         document.getElementById('res-class').textContent = license.permitClass || '';
+
+        var photoFrame = document.querySelector('.photo-frame');
+        if (license.photo) {
+            photoFrame.innerHTML = '<img src="' + license.photo + '" alt="License Holder" style="width:100%;height:100%;object-fit:cover;">';
+        } else {
+            photoFrame.innerHTML = '<span class="material-symbols-outlined">person</span>';
+        }
 
         const qrContainer = document.getElementById('result-qr-code');
         qrContainer.innerHTML = '';

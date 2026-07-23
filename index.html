@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Verification Portal - Official Government Website</title>
+    <meta name="description" content="Official License Verification Portal - Verify professional licenses instantly.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-inner">
+            <span class="gov-indicator">
+                <span class="material-symbols-outlined">verified_user</span>
+                Official Government Portal &mdash; Secure Connection
+            </span>
+            <span class="gov-status">
+                <span class="status-dot"></span>
+                System Operational
+            </span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-shield">
+                    <span class="material-symbols-outlined">shield</span>
+                </div>
+                <div class="logo-text">
+                    <h1>License Verification Portal</h1>
+                    <span class="logo-sub">Department of Professional Licensing &amp; Standards</span>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-link active" onclick="showSection('home')">
+                    <span class="material-symbols-outlined">home</span> Home
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('verify')">
+                    <span class="material-symbols-outlined">search</span> Verify
+                </a>
+                <a href="barcode.html" class="nav-link">
+                    <span class="material-symbols-outlined">qr_code_2</span> QR Code
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('about')">
+                    <span class="material-symbols-outlined">info</span> About
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero-section">
+        <div class="hero-bg-pattern"></div>
+        <div class="hero-content">
+            <div class="hero-shield-container">
+                <div class="hero-shield">
+                    <span class="material-symbols-outlined">shield</span>
+                </div>
+                <div class="shield-ring ring-1"></div>
+                <div class="shield-ring ring-2"></div>
+                <div class="shield-ring ring-3"></div>
+            </div>
+            <h2 class="hero-title">License Verification Portal</h2>
+            <p class="hero-subtitle">Scan the QR Code or enter the License Number to verify authenticity.</p>
+
+            <!-- Search Card -->
+            <div class="glass-card search-card">
+                <div class="search-tabs">
+                    <button class="tab-btn active" onclick="switchTab('license')">
+                        <span class="material-symbols-outlined">badge</span> License Number
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('qr')">
+                        <span class="material-symbols-outlined">qr_code_scanner</span> QR Code
+                    </button>
+                </div>
+
+                <div class="tab-content active" id="tab-license">
+                    <div class="search-form">
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined input-icon">credit_card</span>
+                            <input type="text" id="license-input" placeholder="Enter License Number (e.g., PL-2026-04821)" autocomplete="off">
+                            <button class="clear-input" onclick="clearInput()" style="display:none;">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <button class="btn-verify" onclick="verifyLicense()">
+                            <span class="material-symbols-outlined">search</span>
+                            Verify License
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-qr">
+                    <div class="qr-scan-area">
+                        <div class="qr-placeholder">
+                            <div class="qr-frame">
+                                <div class="qr-corner tl"></div>
+                                <div class="qr-corner tr"></div>
+                                <div class="qr-corner bl"></div>
+                                <div class="qr-corner br"></div>
+                            </div>
+                            <span class="material-symbols-outlined qr-cam-icon">photo_camera</span>
+                            <p>Position QR Code within the frame</p>
+                            <small>Camera access required for live scanning</small>
+                        </div>
+                    </div>
+                    <button class="btn-verify qr-upload-btn" onclick="document.getElementById('qr-upload').click()">
+                        <span class="material-symbols-outlined">upload</span>
+                        Upload QR Image
+                    </button>
+                    <input type="file" id="qr-upload" accept="image/*" style="display:none;" onchange="handleQRUpload(event)">
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="12847">0</span>
+                    <span class="stat-label">Verifications Today</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="852341">0</span>
+                    <span class="stat-label">Total Records</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="99">0</span>
+                    <span class="stat-label">System Uptime %</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Verification Result Section -->
+    <section class="result-section" id="result-section" style="display:none;">
+        <div class="result-container">
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loading-overlay">
+                <div class="loader">
+                    <div class="loader-shield">
+                        <span class="material-symbols-outlined">shield</span>
+                    </div>
+                    <div class="loader-ring"></div>
+                    <p class="loader-text">Verifying License...</p>
+                    <div class="loader-progress">
+                        <div class="loader-bar"></div>
+                    </div>
+                    <div class="loader-steps">
+                        <span class="step active" data-step="1">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Checking database
+                        </span>
+                        <span class="step" data-step="2">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Validating format
+                        </span>
+                        <span class="step" data-step="3">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Confirming status
+                        </span>
+                        <span class="step" data-step="4">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Generating result
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Card -->
+            <div class="result-card" id="result-card" style="display:none;">
+                <!-- Valid Result -->
+                <div class="result-valid" id="result-valid" style="display:none;">
+                    <div class="result-header valid">
+                        <div class="result-status-icon valid">
+                            <span class="material-symbols-outlined">verified</span>
+                        </div>
+                        <h3>License Verified Successfully</h3>
+                        <div class="valid-badge">
+                            <span class="material-symbols-outlined">verified</span>
+                            VALID
+                        </div>
+                    </div>
+
+                    <div class="result-body">
+                        <div class="result-top-row">
+                            <div class="holder-photo">
+                                <div class="photo-frame">
+                                    <span class="material-symbols-outlined">person</span>
+                                </div>
+                                <span class="photo-label">License Holder</span>
+                            </div>
+                            <div class="holder-qr">
+                                <div id="result-qr-code"></div>
+                                <span class="photo-label">Scan to Verify</span>
+                            </div>
+                        </div>
+
+                        <div class="result-details">
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Full Name</span>
+                                    <span class="detail-value" id="res-name"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">License Number</span>
+                                    <span class="detail-value mono" id="res-number"></span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">License Type</span>
+                                    <span class="detail-value" id="res-type"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Status</span>
+                                    <span class="detail-value status-valid" id="res-status"></span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Issue Date</span>
+                                    <span class="detail-value" id="res-issue"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Expiry Date</span>
+                                    <span class="detail-value" id="res-expiry"></span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <span class="detail-label">Verification ID</span>
+                                    <span class="detail-value mono" id="res-vid"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">QR Verification</span>
+                                    <span class="detail-value">
+                                        <span class="qr-verified-badge">
+                                            <span class="material-symbols-outlined">check_circle</span>
+                                            Success
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="security-seal">
+                            <div class="seal-icon">
+                                <span class="material-symbols-outlined">verified_user</span>
+                            </div>
+                            <div class="seal-text">
+                                <strong>Official Security Seal</strong>
+                                <span>This verification has been authenticated by the Department of Professional Licensing &amp; Standards. All records are maintained in the central government database.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invalid Result -->
+                <div class="result-invalid" id="result-invalid" style="display:none;">
+                    <div class="result-header invalid">
+                        <div class="result-status-icon invalid">
+                            <span class="material-symbols-outlined">cancel</span>
+                        </div>
+                        <h3>License Not Found</h3>
+                        <div class="invalid-badge">
+                            <span class="material-symbols-outlined">error</span>
+                            INVALID
+                        </div>
+                    </div>
+                    <div class="result-body">
+                        <div class="invalid-info">
+                            <p>The license number you entered does not exist in our official records.</p>
+                            <div class="invalid-number">
+                                <span class="detail-label">Entered License Number</span>
+                                <span class="detail-value mono" id="invalid-number"></span>
+                            </div>
+                            <p class="invalid-hint">Please verify the license number and try again. If you believe this is an error, contact the Department of Professional Licensing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-secondary" onclick="goBack()">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                        Verify Another
+                    </button>
+                    <button class="btn-secondary" onclick="window.print()">
+                        <span class="material-symbols-outlined">print</span>
+                        Print Result
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about-section" style="display:none;">
+        <div class="about-container">
+            <div class="glass-card about-card">
+                <h2><span class="material-symbols-outlined">info</span> About This Portal</h2>
+                <p>The License Verification Portal provides a secure and reliable way to verify professional licenses issued by the Department of Professional Licensing &amp; Standards. Citizens, employers, and regulatory bodies can use this system to confirm the validity and status of any licensed professional.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <span class="material-symbols-outlined">shield</span>
+                        <h4>Secure &amp; Encrypted</h4>
+                        <p>All data is transmitted over encrypted connections and protected by government-grade security protocols.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="material-symbols-outlined">qr_code_scanner</span>
+                        <h4>QR Code Verification</h4>
+                        <p>Scan the QR code on any license document for instant verification against the central database.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="material-symbols-outlined">devices</span>
+                        <h4>Accessible Anywhere</h4>
+                        <p>Fully responsive design ensures access from desktop, tablet, or mobile device at any time.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="material-symbols-outlined">database</span>
+                        <h4>Real-Time Database</h4>
+                        <p>Results are fetched in real-time from the official government licensing database.</p>
+                    </div>
+                </div>
+
+                <div class="about-info">
+                    <h3>How It Works</h3>
+                    <div class="steps-list">
+                        <div class="step-item">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Enter License Number</h4>
+                                <p>Type the license number exactly as shown on the license document.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>System Verification</h4>
+                                <p>The system queries the central database to verify the license status and details.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>View Results</h4>
+                                <p>Receive complete verification results including holder details, validity, and expiry information.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <p>Department of Professional Licensing &amp; Standards</p>
+                    <p>For inquiries, please contact the licensing authority or visit your nearest government office.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="#">Home</a>
+                    <a href="#">Verify License</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Department</h4>
+                    <a href="#">Official Website</a>
+                    <a href="#">Public Notices</a>
+                    <a href="#">Regulations</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Department of Professional Licensing &amp; Standards. All rights reserved.</span>
+                <span class="footer-version">Secure Portal v1.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

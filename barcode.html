@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - License Verification Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .barcode-page { min-height: 100vh; background: var(--gray-50); }
+        .barcode-hero {
+            background: linear-gradient(160deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary) 100%);
+            padding: 40px 24px 50px; text-align: center; color: white; position: relative; overflow: hidden;
+        }
+        .barcode-hero-bg { position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 50%, rgba(13,124,62,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 40%); pointer-events: none; }
+        .barcode-hero-content { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+        .barcode-hero h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+        .barcode-hero p { font-size: 0.95rem; opacity: 0.75; }
+        .scan-note { margin-top: 14px; padding: 10px 18px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 0.82rem; color: rgba(255,255,255,0.9); display: none; }
+        .scan-note code { background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-weight: 600; }
+        .barcode-container { max-width: 900px; margin: -30px auto 40px; padding: 0 24px; position: relative; z-index: 2; }
+        .barcode-main-card { background: white; border-radius: var(--radius); box-shadow: 0 4px 24px rgba(10,36,99,0.1); overflow: hidden; }
+        .barcode-tabs { display: flex; border-bottom: 1px solid var(--gray-200); background: var(--gray-50); }
+        .barcode-tab-btn { flex: 1; padding: 16px 20px; border: none; background: transparent; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 500; color: var(--gray-400); display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); position: relative; }
+        .barcode-tab-btn .material-symbols-outlined { font-size: 18px; }
+        .barcode-tab-btn.active { color: var(--primary); background: white; }
+        .barcode-tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: var(--accent); border-radius: 3px 3px 0 0; }
+        .barcode-tab-content { display: none; padding: 32px; }
+        .barcode-tab-content.active { display: block; }
+        .gen-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+        .gen-field { display: flex; flex-direction: column; gap: 6px; }
+        .gen-field.full-width { grid-column: 1 / -1; }
+        .gen-label { font-size: 0.82rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.3px; }
+        .gen-input, .gen-select { padding: 12px 14px; border: 2px solid var(--gray-200); border-radius: var(--radius-xs); font-family: inherit; font-size: 0.9rem; color: var(--gray-700); background: white; transition: var(--transition); outline: none; }
+        .gen-input:focus, .gen-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .gen-input::placeholder { color: var(--gray-300); }
+        .gen-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b92a5' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+        .gen-checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+        .gen-checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+        .gen-checkbox-row label { font-size: 0.85rem; color: var(--gray-600); cursor: pointer; }
+        .gen-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn-generate { padding: 12px 28px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .btn-generate:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 4px 16px var(--accent-glow); }
+        .btn-generate .material-symbols-outlined { font-size: 20px; }
+        .btn-print { padding: 12px 28px; background: white; color: var(--gray-600); border: 2px solid var(--gray-200); border-radius: var(--radius-sm); font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .btn-print:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-print .material-symbols-outlined { font-size: 20px; }
+        .btn-download { padding: 12px 28px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .btn-download:hover { background: var(--primary-light); transform: translateY(-1px); }
+        .btn-download .material-symbols-outlined { font-size: 20px; }
+        .barcode-preview { margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--gray-200); display: none; }
+        .barcode-preview.visible { display: block; animation: fadeUp 0.4s ease-out; }
+        .preview-label { font-size: 0.82rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; text-align: center; }
+        .barcode-display { background: white; border: 2px dashed var(--gray-200); border-radius: var(--radius-sm); padding: 32px; text-align: center; width: 100%; display: flex; justify-content: center; }
+        .qr-box { display: inline-block; padding: 12px; background: white; border: 1px solid var(--gray-200); border-radius: 8px; }
+        .barcode-text { margin-top: 12px; font-size: 0.82rem; color: var(--gray-500); font-family: 'Courier New', monospace; word-break: break-all; }
+        .url-info { padding: 16px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; }
+        .url-info .material-symbols-outlined { font-size: 20px; color: var(--primary); min-width: 20px; margin-top: 2px; }
+        .url-info p { font-size: 0.85rem; color: var(--gray-500); line-height: 1.5; }
+        .url-info strong { color: var(--gray-700); }
+        .url-example { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--primary); background: white; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--gray-200); word-break: break-all; }
+        .batch-list { margin-top: 20px; }
+        .batch-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-xs); margin-bottom: 8px; }
+        .batch-item-left { display: flex; align-items: center; gap: 12px; }
+        .batch-item-num { font-family: 'Courier New', monospace; font-weight: 600; color: var(--gray-700); font-size: 0.9rem; }
+        .batch-item-name { font-size: 0.82rem; color: var(--gray-400); }
+        .batch-item-actions { display: flex; gap: 6px; }
+        .batch-btn { width: 32px; height: 32px; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); background: white; border: 1px solid var(--gray-200); color: var(--gray-500); }
+        .batch-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .batch-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+        .batch-btn .material-symbols-outlined { font-size: 16px; }
+        .batch-add-row { display: flex; gap: 10px; margin-bottom: 16px; }
+        .batch-add-row input { flex: 1; padding: 10px 14px; border: 2px solid var(--gray-200); border-radius: var(--radius-xs); font-family: inherit; font-size: 0.9rem; outline: none; transition: var(--transition); }
+        .batch-add-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .batch-add-btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: var(--radius-xs); font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: var(--transition); white-space: nowrap; }
+        .batch-add-btn:hover { background: var(--primary-light); }
+        .batch-add-btn .material-symbols-outlined { font-size: 16px; }
+        .batch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .batch-card { background: white; border: 1px solid var(--gray-200); border-radius: 12px; padding: 20px; text-align: center; transition: var(--transition); }
+        .batch-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        .batch-card-name { font-size: 13px; font-weight: 700; color: var(--gray-700); margin-bottom: 2px; }
+        .batch-card-license { font-size: 11px; color: var(--gray-400); font-family: monospace; margin-bottom: 12px; }
+        .batch-card .qr-box { display: inline-block; padding: 8px; background: white; border: 1px solid var(--gray-200); border-radius: 6px; }
+        .batch-card-type { font-size: 10px; color: var(--gray-400); margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .print-area { display: none; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 640px) { .gen-form { grid-template-columns: 1fr; } .gen-actions { flex-direction: column; } .gen-actions button { justify-content: center; } .barcode-hero h2 { font-size: 1.4rem; } .batch-grid { grid-template-columns: 1fr 1fr; } }
+        @media print { body * { visibility: hidden; } .print-area, .print-area * { visibility: visible; } .print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 15mm; } .print-area .print-item { text-align: center; margin-bottom: 20px; page-break-inside: avoid; } .print-area .print-item h3 { font-size: 13px; font-weight: 700; margin-bottom: 2px; } .print-area .print-item p { font-size: 10px; color: #666; font-family: monospace; margin-bottom: 6px; } .print-area .qr-box { display: inline-block; padding: 8px; border: 1px solid #ddd; border-radius: 6px; } .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } }
+    </style>
+</head>
+<body class="barcode-page">
+    <div class="top-bar">
+        <div class="top-bar-inner">
+            <span class="gov-indicator"><span class="material-symbols-outlined">verified_user</span> Official Government Portal &mdash; Secure Connection</span>
+            <span class="gov-status"><span class="status-dot"></span> System Operational</span>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-shield"><span class="material-symbols-outlined">shield</span></div>
+                <div class="logo-text"><h1>License Verification Portal</h1><span class="logo-sub">Department of Professional Licensing &amp; Standards</span></div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link"><span class="material-symbols-outlined">home</span> Home</a>
+                <a href="barcode.html" class="nav-link active"><span class="material-symbols-outlined">qr_code_2</span> QR Code</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="barcode-hero">
+        <div class="barcode-hero-bg"></div>
+        <div class="barcode-hero-content">
+            <h2>QR Code Generator</h2>
+            <p>Generate QR codes for license documents - scan with phone camera to verify</p>
+            <div class="scan-note" id="scan-note"></div>
+        </div>
+    </div>
+
+    <div class="barcode-container">
+        <div class="barcode-main-card">
+            <div class="barcode-tabs">
+                <button class="barcode-tab-btn active" onclick="switchTab('single')"><span class="material-symbols-outlined">qr_code</span> Single QR Code</button>
+                <button class="barcode-tab-btn" onclick="switchTab('url')"><span class="material-symbols-outlined">link</span> URL QR Code</button>
+                <button class="barcode-tab-btn" onclick="switchTab('batch')"><span class="material-symbols-outlined">inventory_2</span> Batch Generate</button>
+            </div>
+
+            <!-- Single -->
+            <div class="barcode-tab-content active" id="tab-single">
+                <div class="url-info">
+                    <span class="material-symbols-outlined">info</span>
+                    <div>
+                        <p><strong>How it works:</strong> This generates a QR code that encodes a full verification URL. When someone scans it with their phone camera, it opens the verification page and checks the license automatically.</p>
+                    </div>
+                </div>
+                <div class="gen-form">
+                    <div class="gen-field">
+                        <span class="gen-label">License Number</span>
+                        <input type="text" class="gen-input" id="single-license" placeholder="PL-2026-04821" value="PL-2026-04821">
+                    </div>
+                    <div class="gen-field">
+                        <span class="gen-label">QR Code Size</span>
+                        <select class="gen-select" id="single-size">
+                            <option value="150">Small (150x150)</option>
+                            <option value="250" selected>Medium (250x250)</option>
+                            <option value="350">Large (350x350)</option>
+                            <option value="500">Extra Large (500x500)</option>
+                        </select>
+                    </div>
+                    <div class="gen-field full-width">
+                        <div class="gen-checkbox-row">
+                            <input type="checkbox" id="single-showtext" checked>
+                            <label for="single-showtext">Show license number below QR code</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="gen-actions">
+                    <button class="btn-generate" onclick="generateSingle()"><span class="material-symbols-outlined">qr_code_2</span> Generate QR Code</button>
+                    <button class="btn-download" id="single-dl" style="display:none;" onclick="downloadQR('single')"><span class="material-symbols-outlined">download</span> Download PNG</button>
+                    <button class="btn-print" id="single-pr" style="display:none;" onclick="printQR('single')"><span class="material-symbols-outlined">print</span> Print</button>
+                </div>
+                <div class="barcode-preview" id="single-preview">
+                    <div class="preview-label">Preview</div>
+                    <div class="barcode-display"><div><div class="qr-box" id="single-qr"></div><div class="barcode-text" id="single-text"></div></div></div>
+                </div>
+            </div>
+
+            <!-- URL -->
+            <div class="barcode-tab-content" id="tab-url">
+                <div class="url-info">
+                    <span class="material-symbols-outlined">info</span>
+                    <div>
+                        <p><strong>Custom URL:</strong> Enter your own website URL. When scanned, the QR code opens your verification page directly.</p>
+                        <p style="margin-top:8px;">Full URL: <span class="url-example" id="url-example"></span></p>
+                    </div>
+                </div>
+                <div class="gen-form">
+                    <div class="gen-field">
+                        <span class="gen-label">License Number</span>
+                        <input type="text" class="gen-input" id="url-license" placeholder="PL-2026-04821" value="PL-2026-04821">
+                    </div>
+                    <div class="gen-field">
+                        <span class="gen-label">Website URL</span>
+                        <input type="text" class="gen-input" id="url-base" placeholder="http://192.168.1.5/license-portal/index.html">
+                    </div>
+                    <div class="gen-field">
+                        <span class="gen-label">QR Code Size</span>
+                        <select class="gen-select" id="url-size">
+                            <option value="150">Small (150x150)</option>
+                            <option value="250" selected>Medium (250x250)</option>
+                            <option value="350">Large (350x350)</option>
+                            <option value="500">Extra Large (500x500)</option>
+                        </select>
+                    </div>
+                    <div class="gen-field">
+                        <div class="gen-checkbox-row" style="margin-top:0;">
+                            <input type="checkbox" id="url-showtext" checked>
+                            <label for="url-showtext">Show URL below QR code</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="gen-actions">
+                    <button class="btn-generate" onclick="generateURL()"><span class="material-symbols-outlined">link</span> Generate URL QR Code</button>
+                    <button class="btn-download" id="url-dl" style="display:none;" onclick="downloadQR('url')"><span class="material-symbols-outlined">download</span> Download PNG</button>
+                    <button class="btn-print" id="url-pr" style="display:none;" onclick="printQR('url')"><span class="material-symbols-outlined">print</span> Print</button>
+                </div>
+                <div class="barcode-preview" id="url-preview">
+                    <div class="preview-label">Preview</div>
+                    <div class="barcode-display"><div><div class="qr-box" id="url-qr"></div><div class="barcode-text" id="url-text"></div></div></div>
+                </div>
+            </div>
+
+            <!-- Batch -->
+            <div class="barcode-tab-content" id="tab-batch">
+                <div class="batch-add-row">
+                    <input type="text" id="batch-input" placeholder="Enter license number (e.g., PL-2026-04821)">
+                    <button class="batch-add-btn" onclick="addBatch()"><span class="material-symbols-outlined">add</span> Add</button>
+                </div>
+                <div class="batch-list" id="batch-list"></div>
+                <div class="gen-actions" style="margin-top: 20px;">
+                    <button class="btn-generate" onclick="generateAll()"><span class="material-symbols-outlined">qr_code_2</span> Generate All QR Codes</button>
+                    <button class="btn-print" id="batch-pr" style="display:none;" onclick="printAll()"><span class="material-symbols-outlined">print</span> Print All</button>
+                </div>
+                <div class="barcode-preview" id="batch-preview">
+                    <div class="preview-label">Generated QR Codes</div>
+                    <div class="batch-grid" id="batch-qr-output"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-area" id="print-area"></div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-bottom" style="border-top:none; padding-top:0;">
+                <span>&copy; 2026 Department of Professional Licensing &amp; Standards. All rights reserved.</span>
+                <span class="footer-version">Secure Portal v1.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        var BASE_URL = window.location.origin + window.location.pathname.replace('barcode.html', 'index.html');
+
+        var people = [
+            { license: 'PL-2026-04821', name: 'John Smith', type: 'Professional License' },
+            { license: 'PL-2025-03294', name: 'Sarah Johnson', type: 'Professional License' },
+            { license: 'CL-2024-01107', name: 'Ahmed Hassan', type: 'Commercial License' },
+            { license: 'ML-2026-07538', name: 'Maria Garcia', type: 'Medical License' },
+            { license: 'EL-2024-05612', name: 'David Williams', type: 'Engineering License' }
+        ];
+
+        var batchItems = people.slice();
+
+        // Show note
+        var note = document.getElementById('scan-note');
+        var host = window.location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') {
+            note.innerHTML = '<strong>Important:</strong> To scan from your phone, replace <code>localhost</code> with your computer\'s IP address. Run <code>ipconfig</code> in CMD to find it. Example: <code>http://192.168.1.5/license-portal/barcode.html</code>';
+            note.style.display = 'block';
+        } else {
+            note.innerHTML = '<strong>Ready:</strong> QR codes will open: <code>' + BASE_URL + '</code>';
+            note.style.display = 'block';
+        }
+
+        document.getElementById('url-base').value = BASE_URL;
+        document.getElementById('url-example').textContent = BASE_URL + '?license=PL-2026-04821';
+
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.barcode-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.barcode-tab-content').forEach(function(c) { c.classList.remove('active'); });
+            if (tab === 'single') { document.querySelector('.barcode-tab-btn:nth-child(1)').classList.add('active'); document.getElementById('tab-single').classList.add('active'); }
+            else if (tab === 'url') { document.querySelector('.barcode-tab-btn:nth-child(2)').classList.add('active'); document.getElementById('tab-url').classList.add('active'); }
+            else { document.querySelector('.barcode-tab-btn:nth-child(3)').classList.add('active'); document.getElementById('tab-batch').classList.add('active'); }
+        };
+
+        function makeQR(id, text, size) {
+            var el = document.getElementById(id);
+            el.innerHTML = '';
+            new QRCode(el, {
+                text: text,
+                width: parseInt(size),
+                height: parseInt(size),
+                colorDark: '#0a2463',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        window.generateSingle = function() {
+            var license = document.getElementById('single-license').value.trim();
+            var size = document.getElementById('single-size').value;
+            var showText = document.getElementById('single-showtext').checked;
+            if (!license) { document.getElementById('single-license').style.borderColor = '#e74c3c'; setTimeout(function() { document.getElementById('single-license').style.borderColor = ''; }, 1500); return; }
+
+            var fullUrl = BASE_URL + '?license=' + encodeURIComponent(license);
+            console.log('Generating QR for URL:', fullUrl);
+
+            makeQR('single-qr', fullUrl, size);
+            document.getElementById('single-text').textContent = showText ? license : '';
+            document.getElementById('single-preview').classList.add('visible');
+            document.getElementById('single-dl').style.display = 'flex';
+            document.getElementById('single-pr').style.display = 'flex';
+        };
+
+        window.generateURL = function() {
+            var license = document.getElementById('url-license').value.trim();
+            var baseUrl = document.getElementById('url-base').value.trim();
+            var size = document.getElementById('url-size').value;
+            var showText = document.getElementById('url-showtext').checked;
+            if (!license || !baseUrl) {
+                if (!license) { document.getElementById('url-license').style.borderColor = '#e74c3c'; setTimeout(function() { document.getElementById('url-license').style.borderColor = ''; }, 1500); }
+                if (!baseUrl) { document.getElementById('url-base').style.borderColor = '#e74c3c'; setTimeout(function() { document.getElementById('url-base').style.borderColor = ''; }, 1500); }
+                return;
+            }
+            var sep = baseUrl.indexOf('?') > -1 ? '&' : '?';
+            var fullUrl = baseUrl + sep + 'license=' + encodeURIComponent(license);
+            console.log('Generating URL QR for:', fullUrl);
+
+            makeQR('url-qr', fullUrl, size);
+            document.getElementById('url-text').textContent = showText ? fullUrl : '';
+            document.getElementById('url-preview').classList.add('visible');
+            document.getElementById('url-dl').style.display = 'flex';
+            document.getElementById('url-pr').style.display = 'flex';
+        };
+
+        // Batch
+        function renderList() {
+            var list = document.getElementById('batch-list');
+            list.innerHTML = '';
+            batchItems.forEach(function(item, i) {
+                var div = document.createElement('div');
+                div.className = 'batch-item';
+                div.innerHTML = '<div class="batch-item-left"><span class="batch-item-num">' + item.license + '</span><span class="batch-item-name">' + item.name + (item.type ? ' - ' + item.type : '') + '</span></div><div class="batch-item-actions"><button class="batch-btn" title="View" onclick="viewSingle(' + i + ')"><span class="material-symbols-outlined">qr_code_2</span></button><button class="batch-btn delete" title="Remove" onclick="removeItem(' + i + ')"><span class="material-symbols-outlined">delete</span></button></div>';
+                list.appendChild(div);
+            });
+        }
+
+        window.addBatch = function() {
+            var input = document.getElementById('batch-input');
+            var val = input.value.trim().toUpperCase();
+            if (!val) { input.style.borderColor = '#e74c3c'; setTimeout(function() { input.style.borderColor = ''; }, 1500); return; }
+            if (batchItems.find(function(b) { return b.license === val; })) { input.value = ''; return; }
+            batchItems.push({ license: val, name: '', type: '' });
+            input.value = '';
+            renderList();
+        };
+
+        window.removeItem = function(i) { batchItems.splice(i, 1); renderList(); };
+
+        window.viewSingle = function(i) {
+            document.getElementById('single-license').value = batchItems[i].license;
+            switchTab('single');
+            generateSingle();
+        };
+
+        window.generateAll = function() {
+            if (batchItems.length === 0) return;
+            var output = document.getElementById('batch-qr-output');
+            output.innerHTML = '';
+
+            batchItems.forEach(function(item, idx) {
+                var card = document.createElement('div');
+                card.className = 'batch-card';
+                var fullUrl = BASE_URL + '?license=' + encodeURIComponent(item.license);
+                card.innerHTML = '<div class="batch-card-name">' + (item.name || 'License Holder') + '</div><div class="batch-card-license">' + item.license + '</div><div class="qr-box" id="bqr-' + idx + '"></div>' + (item.type ? '<div class="batch-card-type">' + item.type + '</div>' : '');
+                output.appendChild(card);
+
+                setTimeout(function() {
+                    makeQR('bqr-' + idx, fullUrl, 150);
+                }, 100 * (idx + 1));
+            });
+
+            document.getElementById('batch-preview').classList.add('visible');
+            document.getElementById('batch-pr').style.display = 'flex';
+        };
+
+        window.downloadQR = function(type) {
+            var box = document.getElementById(type === 'single' ? 'single-qr' : 'url-qr');
+            var license = document.getElementById(type === 'single' ? 'single-license' : 'url-license').value.trim();
+            var img = box.querySelector('img');
+            if (!img) { alert('Generate a QR code first.'); return; }
+            var link = document.createElement('a');
+            link.download = 'qr-' + license + '.png';
+            link.href = img.src;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        window.printQR = function(type) {
+            var box = document.getElementById(type === 'single' ? 'single-qr' : 'url-qr');
+            var license = document.getElementById(type === 'single' ? 'single-license' : 'url-license').value.trim();
+            var img = box.querySelector('img');
+            if (!img) return;
+            var pa = document.getElementById('print-area');
+            pa.innerHTML = '<div class="print-item"><h3>License Verification QR Code</h3><p>' + license + '</p><div class="qr-box"><img src="' + img.src + '" style="width:200px;height:200px;"></div></div>';
+            window.print();
+        };
+
+        window.printAll = function() {
+            var pa = document.getElementById('print-area');
+            var html = '<div class="print-grid">';
+            batchItems.forEach(function(item, idx) {
+                var box = document.getElementById('bqr-' + idx);
+                var img = box ? box.querySelector('img') : null;
+                var src = img ? img.src : '';
+                html += '<div class="print-item"><h3>' + (item.name || 'License Holder') + '</h3><p>' + item.license + (item.type ? ' - ' + item.type : '') + '</p><div class="qr-box"><img src="' + src + '" style="width:180px;height:180px;"></div></div>';
+            });
+            html += '</div>';
+            pa.innerHTML = html;
+            window.print();
+        };
+
+        document.getElementById('batch-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') window.addBatch(); });
+
+        renderList();
+    })();
+    </script>
+</body>
+</html>

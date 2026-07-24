@@ -244,7 +244,7 @@ function showResult(licenseNum) {
         const qrContainer = document.getElementById('result-qr-code');
         qrContainer.innerHTML = '';
         new QRCode(qrContainer, {
-            text: window.location.origin + window.location.pathname + '?license=' + license.passport,
+            text: 'https://ahmed2002e.github.io/license-portal/index.html?license=' + license.passport,
             width: 92,
             height: 92,
             colorDark: '#0a2463',

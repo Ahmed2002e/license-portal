@@ -58,6 +58,21 @@ const LICENSE_DB = {
         bloodGroup: 'A+',
         permitClass: 'B',
         photo: 'photos/P10313788.png'
+    },
+    'P10217163': {
+        number: '20003656',
+        name: 'MONTASER MUSA MOHAMED SALIM',
+        type: 'International Driving Permit',
+        issueDate: '07 May 2026',
+        expiryDate: '06 May 2027',
+        status: 'VALID',
+        dob: '17/11/2005',
+        nationality: 'Sudan',
+        passport: 'P10217163',
+        gender: 'Male',
+        bloodGroup: 'A+',
+        permitClass: 'B',
+        photo: 'photos/P10217163.png'
     }
 };
 
